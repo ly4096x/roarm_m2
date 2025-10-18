@@ -973,7 +973,7 @@ const char index_html[] PROGMEM = R"rawliteral(
                   this.responseText;
                 }
             };
-            xhttp.open("GET", "js?json="+document.getElementById('jsonData').value, true);
+            xhttp.open("GET", "js?json="+encodeURIComponent(document.getElementById('jsonData').value), true);
             xhttp.send();
         }
 

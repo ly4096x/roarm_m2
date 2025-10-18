@@ -291,7 +291,7 @@ int RoArmM2_shoulderJointCtrlRad(byte returnType, double radInput, u16 speedInpu
 // angleInput increase, it moves down.
 int RoArmM2_elbowJointCtrlRad(byte returnType, double radInput, u16 speedInput, u8 accInput) {
   s16 computePos = calculatePosByRad(radInput) + 1024;
-  goalPos[3] = constrain(computePos, 512, 3071);
+  goalPos[3] = constrain(computePos, 796, 3071);
 
   if(returnType){
     st.WritePosEx(ELBOW_SERVO_ID, goalPos[3], speedInput, accInput);

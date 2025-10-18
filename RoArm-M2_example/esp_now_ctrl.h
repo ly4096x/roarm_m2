@@ -90,6 +90,23 @@ void changeEspNowMode(byte inputMode) {
 
 
 // callback when data is sent
+#if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 5, 0)
+// IDF 5.5 uses wifi_tx_info_t
+void OnDataSent(const wifi_tx_info_t *info, esp_now_send_status_t status) {
+  if (info) {
+    const uint8_t* mac_addr = info->des_addr;  // available in IDF 5.5
+    Serial.print("Packet to: ");
+    // Copies the sender mac address to a string
+    char macStr[18];
+    snprintf(macStr, sizeof(macStr), "%02x:%02x:%02x:%02x:%02x:%02x",
+           mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
+    Serial.print(macStr);
+  }
+  Serial.print(" send status:\t");
+  Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
+}
+#else
+// Old signature (IDF 4.x)
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   char macStr[18];
   Serial.print("Packet to: ");
@@ -100,6 +117,7 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   Serial.print(" send status:\t");
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
 }
+#endif
 
 
 void macStringToByteArray(const String& macString, uint8_t* byteArray) {
